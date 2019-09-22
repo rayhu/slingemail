@@ -1,0 +1,38 @@
+{
+	"info": {
+		"_postman_id": "d68d8672-2e33-4992-810c-542f439a3e43",
+		"name": "email-sling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post-email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"to\":\"fake@example.com\",\n    \"to_name\":\"Ms. Fake\",\n    \"from\":\"noreply@uber.com\",\n    \"from_name\":\"Uber\",\n    \"subject\":\"A Message from Uber\",\n    \"body\": \"<h1>Your Bill</h1><p>$10</p>\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/email",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"email"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

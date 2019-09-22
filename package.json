@@ -1,0 +1,26 @@
+{
+  "name": "emailservice",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "build": "babel --presets es2015 -d lib/ src",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "constantinople": "^3.1.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-validator": "^6.2.0",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "pug": "^2.0.4",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "mocha": "^6.2.0"
+  }
+}
