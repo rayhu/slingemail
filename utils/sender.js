@@ -2,7 +2,7 @@
 
 const request = require('request');
 
-process.env.CURRENTEMAILPROVIDER = 'sendgrid';
+process.env.CURRENTEMAILPROVIDER = 'postmark';
 
 function initialize(provider) {
     if (typeof provider === 'undefined') {
@@ -24,6 +24,9 @@ function EmailProvider (provider) {
 }
     
 function Sendgrid(){
+    /**
+     * https://sendgrid.com/docs/api-reference/
+     */
     this.send = function(email){
         var sdoptions = {
             url: '/v3/mail/send',
@@ -49,7 +52,6 @@ function Sendgrid(){
         sdoptions.body.content.push({"type":"text/html","value": email.body})
         console.log(JSON.stringify(sdoptions))
         return new Promise(function(resolve, reject) {
-            // Do async job
                request.post(sdoptions, function(err, resp, body) {
                    console.log(resp.statusCode);
                    if (err) {
@@ -66,12 +68,43 @@ function Sendgrid(){
 Sendgrid.prototype = new EmailProvider();
   
 function Postmark(){
-    this.initialize = function(){};
-    this.send = function(){
+    /**
+     * https://postmarkapp.com/developer/user-guide/sending-email/sending-with-api
+     */
+    this.send = function(email){
+        var pmoptions = {
+            url: '/mail',
+            baseUrl: 'https://api.postmarkapp.com',
+            json: true,
+            method: 'POST',
+            headers: {},
+            body:{},
+        };
         const postmarkApikey = process.env.POSTMARK_API_KEY; 
+        pmoptions.headers = "X-Postmark-Server-Token:" + postmarkApikey; 
+
+        pmoptions.body.From={"email":email.from};
+        pmoptions.body.To={"email":email.to};
+        pmoptions.body.Subject=email.subject;
+        pmoptions.body.HtmlBody=email.body;
+        pmoptions.body.TextBody=email.text;
+
         console.log("postmark -> send called");
+        return new Promise(function(resolve, reject) {
+               request.post(pmoptions, function(err, resp, body) {
+                   console.log(resp.statusCode);
+                   if (err) {
+                       console.log("error = " + error);
+                       reject(err);
+                   } else {
+                       console.log(resp.headers);
+                       resolve(resp);
+                   }
+               })
+           });
+        }
     } 
-}
+
 Postmark.prototype = new EmailProvider();
 
 module.exports = {initialize, Sendgrid, Postmark}
