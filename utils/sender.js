@@ -2,11 +2,9 @@
 
 const request = require('request');
 
-process.env.CURRENTEMAILPROVIDER = 'postmark';
-
 function initialize(provider) {
     if (typeof provider === 'undefined') {
-        provider=process.env.CURRENTEMAILPROVIDER;
+        provider=process.env.DEFAULT_EMAIL_PROVIDER;
     }
     switch(provider){
         case 'sendgrid':
@@ -50,12 +48,9 @@ function Sendgrid(){
         sdoptions.body.content=[];
         sdoptions.body.content.push({"type":"text/plain","value": email.text})
         sdoptions.body.content.push({"type":"text/html","value": email.body})
-        console.log(JSON.stringify(sdoptions))
         return new Promise(function(resolve, reject) {
                request.post(sdoptions, function(err, resp, body) {
-                   console.log(resp.statusCode);
                    if (err) {
-                       console.log("error = " + error);
                        reject(err);
                    } else {
                        console.log(resp.headers);
@@ -73,8 +68,8 @@ function Postmark(){
      */
     this.send = function(email){
         var pmoptions = {
-            url: '/mail',
-            baseUrl: 'https://api.postmarkapp.com',
+            url: '/email',
+            baseUrl: '"https://api.postmarkapp.com/',
             json: true,
             method: 'POST',
             headers: {},
@@ -89,12 +84,10 @@ function Postmark(){
         pmoptions.body.HtmlBody=email.body;
         pmoptions.body.TextBody=email.text;
 
-        console.log("postmark -> send called");
+        //console.log(pmoptions);
         return new Promise(function(resolve, reject) {
                request.post(pmoptions, function(err, resp, body) {
-                   console.log(resp.statusCode);
                    if (err) {
-                       console.log("error = " + error);
                        reject(err);
                    } else {
                        console.log(resp.headers);
