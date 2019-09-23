@@ -69,7 +69,7 @@ function Postmark(){
     this.send = function(email){
         var pmoptions = {
             url: '/email',
-            baseUrl: '"https://api.postmarkapp.com/',
+            baseUrl: 'https://api.postmarkapp.com/',
             json: true,
             method: 'POST',
             headers: {},
